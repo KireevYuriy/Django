@@ -2,11 +2,24 @@
 {% load static %}
 
 {% block 'content' %}
-<!--<div class="hero-white">-->
+
 		<div class="details">
 			<div class="links clearfix">
-				{% include 'mainapp/include/prod_menu.html' %}
+					<ul class="links-menu">
+					{% for category in categories %}
+						<li>
+							<a href="{% url 'products:category' category.id %}"
+							   class="{% if category.id == selected_category.id %}
+				    			active
+				    			{% endif %}"> {{ category }}
+
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
 			</div>
+
+		</div>
 			<div class="details-products">
 				{% if products %}
 					{% with product=products.0 %}
@@ -20,7 +33,7 @@
 						<div class="description">
 							<h3 class="big-bold">{{ products.0.name }}</h3>
 							<h3 class="red">{{ products.0.short_desc }}</h3>
-							<p class="price"> {{ products.price}} <span>руб</span></p>
+							<p class="price"> {{ products.0.price }} <span>руб</span></p>
 							<a href="#" class="red-button">
 								заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
 							</a>

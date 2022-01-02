@@ -3,9 +3,9 @@ from .models import Product, ProductCategory
 from django.shortcuts import get_object_or_404
 
 MENU_LINKS = [
-        {'href': 'index', 'name': 'домой'},
-        {'href': 'products', 'name': 'продукты'},
-        {'href': 'contact', 'name': 'контакты'},
+        {'href': 'index', 'active_if': ['index'], 'name': 'домой'},
+        {'href': 'products:index', 'active_if': ['products:index', 'products:category'], 'name': 'продукты'},
+        {'href': 'contact', 'active_if': ['contact'], 'name': 'контакты'},
     ]
 
 def index(request):
