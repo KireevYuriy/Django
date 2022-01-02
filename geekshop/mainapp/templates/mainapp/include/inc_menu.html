@@ -1,20 +1,37 @@
-			<div class="header clearfix">
-				<a href="/" class="logo"></a>
-				<ul class="menu">
-					{%  for link in menu_links %}
-						<li><a href="{% url link.href %}"
-							   class="{% if request.resolver_match.url_name == link.href %}
-							   		active
-								{% endif %}">
-							{{ link.name }}
-							</a>
-						</li>
-					{% endfor %}
-				</ul>
-				<a href="#" class="search"></a>
-			</div>
+<div class="header clearfix">
+	<a href="{% url 'index' %}"  class="logo"></a>
+	<ul class="menu">
+		{%  for link in menu_links %}
+			<li>
+				<a href="{% url link.href %}"
+				   {% with url=request.resolver_match.view_name %}
+				   {% if url in link.active_if %}
+				   		class="active"
+				   {% endif %}>
+				   {% endwith %}
+				{{ link.name }}
+				</a>
+			</li>
+		{% endfor %}
+		{% if user.is_authenticated %}
+			<li>
+				<a href="{% url 'auth:edit' %}">
+					{{ user.first_name|default:'Пользователь' }}
+				</a>
+			</li>
+		<li>
+			<a href="{% url 'auth:logout' %}">выйти</a>
+		</li>
+		{% else %}
+		<li>
+			<a href="{% url 'auth:login' %}">войти</a>
+		</li>
+		<li>
+			<a href="{% url 'auth:register' %}">регистрация</a>
+		</li>
+		{% endif %}
+	</ul>
+	<a href="#" class="basket"></a>
+</div>
 
-			<!--			<div class="header clearfix">-->
-<!--				<a href="/" class="logo"></a>-->
-<!--				<a href="#" class="search"></a>-->
-<!--			</div>-->
+
