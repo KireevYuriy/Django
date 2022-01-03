@@ -7,6 +7,10 @@ class ShopUserLoginForm(AuthenticationForm):
     class Meta:
         model = ShopUser
         fields = ('username', 'password')
+
+    error_css_class = 'has-error'
+
+
     def __init__(self, *args, **kwargs):
         super(ShopUserLoginForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
