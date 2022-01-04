@@ -3,10 +3,15 @@ from .models import Product, ProductCategory
 from django.shortcuts import get_object_or_404
 
 MENU_LINKS = [
-        {'href': 'index', 'active_if': ['index'], 'name': 'домой'},
-        {'href': 'products:index', 'active_if': ['products:index', 'products:category'], 'name': 'продукты'},
-        {'href': 'contact', 'active_if': ['contact'], 'name': 'контакты'},
-    ]
+    {"href": "index", "active_if": ["index"], "name": "домой"},
+    {
+        "href": "products:index",
+        "active_if": ["products:index", "products:category"],
+        "name": "продукты",
+    },
+    {"href": "contact", "active_if": ["contact"], "name": "контакты"},
+]
+
 
 def index(request):
     # products = [
@@ -22,21 +27,29 @@ def index(request):
     #     }
     # ]
     products = Product.objects.all()
-    return render(request, 'mainapp/index.html', context={
-        'title': 'Магазин',
-        'content_block_class': 'slider',
-        'menu_links': MENU_LINKS,
-        'products': products,
-    })
+    return render(
+        request,
+        "mainapp/index.html",
+        context={
+            "title": "Магазин",
+            "content_block_class": "slider",
+            "menu_links": MENU_LINKS,
+            "products": products,
+        },
+    )
 
 
 def contact(request):
 
-    return render(request, 'mainapp/contact.html', context={
-        'title': 'Контакты',
-        'content_block_class': 'hero',
-        'menu_links': MENU_LINKS
-    })
+    return render(
+        request,
+        "mainapp/contact.html",
+        context={
+            "title": "Контакты",
+            "content_block_class": "hero",
+            "menu_links": MENU_LINKS,
+        },
+    )
 
 
 def products(request, pk=None):
@@ -46,12 +59,15 @@ def products(request, pk=None):
         select_category = get_object_or_404(ProductCategory, id=pk)
     categories = ProductCategory.objects.all()
     products = Product.objects.filter(category=select_category)
-    return render(request, 'mainapp/products.html', context={
-        'title': 'Каталог',
-        'content_block_class': 'hero-white',
-        'menu_links': MENU_LINKS,
-        'select_category': select_category,
-        'categories': categories,
-        'products': products,
-    })
-
+    return render(
+        request,
+        "mainapp/products.html",
+        context={
+            "title": "Каталог",
+            "content_block_class": "hero-white",
+            "menu_links": MENU_LINKS,
+            "select_category": select_category,
+            "categories": categories,
+            "products": products,
+        },
+    )
