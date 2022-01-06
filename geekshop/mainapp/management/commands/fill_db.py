@@ -16,7 +16,7 @@ class Command(BaseCommand):
         categories = load_from_json("categories")
         ProductCategory.objects.all().delete()
         for category in categories:
-            new_category = ProductCategory(**category)
+            new_category, _ = ProductCategory.objects.get_or_create(**category)
             new_category.save()
         products = load_from_json("products")
         Product.objects.all().delete()
@@ -26,7 +26,9 @@ class Command(BaseCommand):
             _category = ProductCategory.objects.get(name=category_name)
             # Заменяем название категории объектом
             product["category"] = _category
-            new_product = Product(**product)
+            new_product, _ = Product.objects.get_or_create(product['name'])
+            for field, value in product:
+                setattr(new_product, field, value)
             new_product.save()
         # Создаем суперпользователя при помощи менеджера модели
         super_user = ShopUser.objects.create_superuser(
