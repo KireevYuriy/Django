@@ -10,9 +10,6 @@ class ProductCategory(models.Model):
 
 
 class Product(models.Model):
-    class Meta:
-        ordering = ('name', '-price')
-
     name = models.CharField(verbose_name="имя", max_length=128, unique=True)
     description = models.TextField(verbose_name="описание", blank=True)
     category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True)
@@ -29,6 +26,3 @@ class Product(models.Model):
         verbose_name="количество на складе", default=0
     )
     image = models.ImageField(upload_to="products_images", blank=True)
-
-    def __str__(self):
-        return self.name
