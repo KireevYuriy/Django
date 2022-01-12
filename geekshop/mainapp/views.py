@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from .models import Product, ProductCategory
+from .models import Product, ProductCategory, ProductManager
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+
 
 MENU_LINKS = [
     {"href": "index", "active_if": ["index"], "name": "домой"},
@@ -24,13 +25,11 @@ def index(request):
             "content_block_class": "slider",
             "menu_links": MENU_LINKS,
             "products": products,
-
         },
     )
 
 
 def contact(request):
-
     return render(
         request,
         "mainapp/contact.html",
@@ -42,26 +41,40 @@ def contact(request):
         },
     )
 
-
-def products(request, pk=None):
-
-    if not pk:
-        select_category = None
-        select_category_dict = {'name': 'Всё', 'href': reverse('products:index')}
-    else:
-        select_category = get_object_or_404(ProductCategory, id=pk)
-        select_category_dict = {'name': select_category.name, 'href': reverse('products:category', args=[select_category.id])}
-
-    categories = [{'name': c.name, 'href': reverse('products:category', args=[c.id])} for c in ProductCategory.objects.all()]
+def products_index(request):
+    select_category_dict = {'name': 'Всё', 'href': reverse('products:index')}
+    categories = [{'name': c.name, 'href': reverse('products:category', args=[c.id])} for c in
+                  ProductCategory.objects.all()]
     categories = [{'name': 'Всё', 'href': reverse('products:index')}, *categories]
-    if select_category:
-        products_query = Product.objects.filter(category=select_category)
-    else:
-        products_query = Product.objects.all()
-    products = products_query.order_by('price')
+    products = Product.objects.all().order_by('price')[:3]
     return render(
         request,
-        "mainapp/products.html",
+        "mainapp/products_list.html",
+        context={
+            "title": "Каталог",
+            "content_block_class": "hero-white",
+            "menu_links": MENU_LINKS,
+            "select_category": select_category_dict,
+            "categories": categories,
+            "hot_product": ProductManager.hot_product,
+            "products": products,
+        },
+    )
+
+
+def products(request, pk=None):
+    select_category = get_object_or_404(ProductCategory, id=pk)
+    select_category_dict = {
+        'name': select_category.name,
+        'href': reverse('products:category', args=[select_category.id])}
+
+    categories = [{'name': c.name, 'href': reverse('products:category', args=[c.id])} for c in
+                  ProductCategory.objects.all()]
+    categories = [{'name': 'Всё', 'href': reverse('products:index')}, *categories]
+    products = Product.objects.filter(category=select_category).order_by("price")
+    return render(
+        request,
+        "mainapp/products_list.html",
         context={
             "title": "Каталог",
             "content_block_class": "hero-white",

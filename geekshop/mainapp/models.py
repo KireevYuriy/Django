@@ -1,17 +1,32 @@
 from django.db import models
+import random
+from django.db.models.fields.related import ForeignKey
 
 
 class ProductCategory(models.Model):
     name = models.CharField(verbose_name="имя", max_length=64, blank=True, unique=True)
     description = models.TextField(verbose_name="описание", blank=True)
 
+    @classmethod
+    def categories_number(cls):
+        return len(cls.objects.all())
+
     def __str__(self):
         return self.name
+
+
+class ProductManager(models.Model):
+    @property
+    def hot_product(self):
+        return random.choice(list(self.all()))
+
 
 
 class Product(models.Model):
     class Meta:
         ordering = ('name', '-price')
+
+    object = ProductManager()
 
     name = models.CharField(verbose_name="имя", max_length=128, unique=True)
     description = models.TextField(verbose_name="описание", blank=True)
