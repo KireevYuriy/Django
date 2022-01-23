@@ -14,6 +14,7 @@ def load_from_json(file_name):
 class Command(BaseCommand):
     def handle(self, *args, **options):
         categories = load_from_json("categories")
+
         ProductCategory.objects.all().delete()
         for category in categories:
             new_category, _ = ProductCategory.objects.get_or_create(**category)

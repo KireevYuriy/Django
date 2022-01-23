@@ -46,7 +46,7 @@ def products_index(request):
     categories = [{'name': c.name, 'href': reverse('products:category', args=[c.id])} for c in
                   ProductCategory.objects.all()]
     categories = [{'name': 'Всё', 'href': reverse('products:index')}, *categories]
-    products = Product.objects.all().order_by('price')[:3]
+    products = Product.objects.all().order_by('price')[:4]
     return render(
         request,
         "mainapp/products_list.html",

@@ -6,6 +6,7 @@ from django.db.models.fields.related import ForeignKey
 class ProductCategory(models.Model):
     name = models.CharField(verbose_name="имя", max_length=64, blank=True, unique=True)
     description = models.TextField(verbose_name="описание", blank=True)
+    is_active = models.BooleanField(verbose_name='активна', default=True)
 
     @classmethod
     def categories_number(cls):
@@ -44,6 +45,10 @@ class Product(models.Model):
         verbose_name="количество на складе", default=0
     )
     image = models.ImageField(upload_to="products_images", blank=True)
+
+    @property
+    def total_cost(self):
+        return self.price * self.quantity
 
     def __str__(self):
         return self.name

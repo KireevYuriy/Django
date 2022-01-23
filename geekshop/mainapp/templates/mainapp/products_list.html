@@ -60,10 +60,10 @@
                     <h2>Похожие продукты</h2>
                     <a class="explore" href="#">показать все <img src="{% static 'img/arrow.png' %}" alt=""></a>
                 </div>
-                <div class="related-products clearfix">
+                <div class="category-products clearfix">
                     {% for product in products %}
                         <div class="block">
-                            <a href="#">
+                            <a href="{% url 'cart:add' product.pk %}">
                                 <img class='product-image' src="/media/{{ product.image }}" alt="{{ product.shot_desk }}">
                                 <div class="text">
                                     <img src="{% static 'img/icon-hover.png' %}" alt="img">
